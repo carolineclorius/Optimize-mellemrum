@@ -33,5 +33,5 @@ Projektet er bygget med:
 Åbn projektet i VS Code og kør følgende kommando i terminalen:
 
 ```bash
-npm run install
+npm install
 ```
