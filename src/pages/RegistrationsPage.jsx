@@ -1,25 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const headers = {
-  apikey: import.meta.env.VITE_SUPABASE_APIKEY,
-  "Content-Type": "application/json"
-};
+import { getRegistrations } from "../services/registrations";
 
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState([]);
   const [registrationCount, setRegistrationCount] = useState(0);
 
   useEffect(() => {
-    async function getRegistrations() {
-      const response = await fetch(`${SUPABASE_URL}/registrations?order=createdAt.desc`, { headers });
-      const data = await response.json();
+    async function loadRegistrations() {
+      const data = await getRegistrations();
       setRegistrations(data);
       setRegistrationCount(data.length);
     }
 
-    getRegistrations();
+    loadRegistrations();
   }, []);
 
   return (
@@ -44,7 +38,9 @@ export default function RegistrationsPage() {
                 <small>{registration.email}</small>
               </div>
               <span>{registration.eventTitle}</span>
-              <span>{new Date(registration.eventDate).toLocaleDateString("da-DK")}</span>
+              <span>
+                {new Date(registration.eventDate).toLocaleDateString("da-DK")}
+              </span>
               <span className="status">{registration.status}</span>
             </div>
           ))}
