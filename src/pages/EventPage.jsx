@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { getEventById } from "../services/events";
 import { createRegistration } from "../services/registrations";
 import successIcon from "../assets/success-icon.svg";
+import errorIcon from "../assets/error-icon.svg";
 
 export default function EventPage() {
   const { eventId } = useParams();
@@ -10,6 +11,7 @@ export default function EventPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function loadEvent() {
@@ -22,15 +24,21 @@ export default function EventPage() {
 
   async function handleSubmit(eventSubmit) {
     eventSubmit.preventDefault();
-    await createRegistration({
-      name: name,
-      email: email,
-      status: "Ny",
-      eventId: event.id,
-    });
-    setSuccessMessage("Tilmeldingen er gennemført.");
-    setName("");
-    setEmail("");
+    setErrorMessage("");
+
+    try {
+      await createRegistration({
+        name: name,
+        email: email,
+        status: "Ny",
+        eventId: event.id,
+      });
+      setSuccessMessage("Tilmeldingen er gennemført.");
+      setName("");
+      setEmail("");
+    } catch {
+      setErrorMessage("Tilmeldingen mislykkedes. Prøv igen.");
+    }
   }
 
   if (!event) {
@@ -119,6 +127,18 @@ export default function EventPage() {
                 </p>
               </div>
               <form onSubmit={handleSubmit}>
+                {errorMessage && (
+                  <div className="registration-error" role="alert">
+                    <img
+                      className="registration-error__icon"
+                      src={errorIcon}
+                      alt=""
+                      aria-hidden="true"
+                    />
+
+                    <p>{errorMessage}</p>
+                  </div>
+                )}
                 <label>
                   Navn
                   <input
