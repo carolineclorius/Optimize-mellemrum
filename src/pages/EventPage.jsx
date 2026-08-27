@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { getEventById } from "../services/events";
 import { createRegistration } from "../services/registrations";
+import successIcon from "../assets/success-icon.svg";
 
 export default function EventPage() {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     async function loadEvent() {
@@ -28,6 +30,9 @@ export default function EventPage() {
       eventDate: event.date,
       eventLocation: event.venueName,
     });
+    setSuccessMessage("Tilmeldingen er gennemført.");
+    setName("");
+    setEmail("");
   }
 
   if (!event) {
@@ -87,31 +92,52 @@ export default function EventPage() {
           </div>
         </section>
 
-        <section className="signup-panel">
-          <div>
-            <p className="eyebrow dark">Tilmelding</p>
-            <h2>Reserver din plads</h2>
-            <p>
-              Udfyld formularen, så sender vi din tilmelding til arrangøren.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit}>
-            <label>
-              Navn
-              <input
-                value={name}
-                onChange={(inputEvent) => setName(inputEvent.target.value)}
+        <section
+          className={`signup-panel ${successMessage ? "signup-panel--success" : ""}`}
+        >
+          {successMessage ? (
+            <div
+              className="registration-success"
+              role="status"
+              aria-live="polite"
+            >
+              <img
+                className="registration-success__icon"
+                src={successIcon}
+                alt=""
+                aria-hidden="true"
               />
-            </label>
-            <span>E-mail</span>
-            <input
-              value={email}
-              onChange={(inputEvent) => setEmail(inputEvent.target.value)}
-              placeholder="dig@example.com"
-            />
-            <button type="submit">Tilmeld mig</button>
-          </form>
+
+              <h2>Din plads er reserveret</h2>
+              <p className="registration-success__event">{event.title}</p>
+            </div>
+          ) : (
+            <>
+              <div>
+                <p className="eyebrow dark">Tilmelding</p>
+                <h2>Reserver din plads</h2>
+                <p>
+                  Udfyld formularen, så sender vi din tilmelding til arrangøren.
+                </p>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <label>
+                  Navn
+                  <input
+                    value={name}
+                    onChange={(inputEvent) => setName(inputEvent.target.value)}
+                  />
+                </label>
+                <span>E-mail</span>
+                <input
+                  value={email}
+                  onChange={(inputEvent) => setEmail(inputEvent.target.value)}
+                  placeholder="dig@example.com"
+                />
+                <button type="submit">Tilmeld mig</button>
+              </form>
+            </>
+          )}
         </section>
       </main>
     </>
