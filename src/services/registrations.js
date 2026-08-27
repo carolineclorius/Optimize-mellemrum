@@ -10,3 +10,11 @@ export async function getRegistrations() {
 
   return response.json();
 }
+
+export async function createRegistration(registration) {
+  await fetch(`${SUPABASE_URL}/registrations`, {
+    method: "POST",
+    headers: supabaseHeaders,
+    body: JSON.stringify(registration),
+  });
+}
