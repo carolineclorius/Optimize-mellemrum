@@ -12,9 +12,13 @@ export async function getRegistrations() {
 }
 
 export async function createRegistration(registration) {
-  await fetch(`${SUPABASE_URL}/registrations`, {
+  const response = await fetch(`${SUPABASE_URL}/registrations`, {
     method: "POST",
     headers: supabaseHeaders,
     body: JSON.stringify(registration),
   });
+
+  if (!response.ok) {
+    throw new Error("Tilmeldingen kunne ikke gemmes");
+  }
 }
