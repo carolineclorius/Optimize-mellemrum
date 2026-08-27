@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { getEventById } from "../services/events";
+import { createRegistration } from "../services/registrations";
 
 export default function EventPage() {
   const { eventId } = useParams();
@@ -19,7 +20,14 @@ export default function EventPage() {
 
   async function handleSubmit(eventSubmit) {
     eventSubmit.preventDefault();
-    console.log({ name, email, event: event.title });
+    await createRegistration({
+      name: name,
+      email: email,
+      status: "Ny",
+      eventTitle: event.title,
+      eventDate: event.date,
+      eventLocation: event.venueName,
+    });
   }
 
   if (!event) {
