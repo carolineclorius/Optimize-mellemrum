@@ -26,9 +26,7 @@ export default function EventPage() {
       name: name,
       email: email,
       status: "Ny",
-      eventTitle: event.title,
-      eventDate: event.date,
-      eventLocation: event.venueName,
+      eventId: event.id,
     });
     setSuccessMessage("Tilmeldingen er gennemført.");
     setName("");

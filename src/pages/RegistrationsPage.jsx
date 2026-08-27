@@ -37,9 +37,13 @@ export default function RegistrationsPage() {
                 <strong>{registration.name}</strong>
                 <small>{registration.email}</small>
               </div>
-              <span>{registration.eventTitle}</span>
               <span>
-                {new Date(registration.eventDate).toLocaleDateString("da-DK")}
+                {registration.event?.title ?? registration.eventTitle}
+              </span>
+              <span>
+                {new Date(
+                  registration.event?.date ?? registration.eventDate,
+                ).toLocaleDateString("da-DK")}
               </span>
               <span className="status">{registration.status}</span>
             </div>
