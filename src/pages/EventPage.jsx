@@ -5,6 +5,7 @@ import { createRegistration } from "../services/registrations";
 import successIcon from "../assets/success-icon.svg";
 import errorIcon from "../assets/error-icon.svg";
 import warningIcon from "../assets/warning-icon.svg";
+import LoadingState from "../components/LoadingState";
 
 export default function EventPage() {
   const { eventId } = useParams();
@@ -67,7 +68,7 @@ export default function EventPage() {
   }
 
   if (!event) {
-    return null;
+    return <LoadingState message="Indlæser event..." />;
   }
 
   const date = new Date(event.date);
