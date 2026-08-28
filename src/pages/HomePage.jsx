@@ -2,18 +2,25 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { getEvents } from "../services/events";
 import LoadingState from "../components/LoadingState";
+import ErrorState from "../components/ErrorState";
 
 export default function HomePage() {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function loadEvents() {
-      const data = await getEvents();
-      setEvents(data);
-      setIsLoading(false);
+      try {
+        const data = await getEvents();
+        setEvents(data);
+      } catch {
+        setErrorMessage("Events kunne ikke hentes. Prøv at genindlæse siden.");
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     loadEvents();
@@ -46,6 +53,10 @@ export default function HomePage() {
 
   if (isLoading) {
     return <LoadingState message="Indlæser events..." />;
+  }
+
+  if (errorMessage) {
+    return <ErrorState message={errorMessage} />;
   }
 
   return (

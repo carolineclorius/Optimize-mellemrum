@@ -5,6 +5,10 @@ export async function getEvents() {
     headers: supabaseHeaders,
   });
 
+  if (!response.ok) {
+    throw new Error("Events kunne ikke hentes");
+  }
+
   return response.json();
 }
 
@@ -12,6 +16,10 @@ export async function getEventById(eventId) {
   const response = await fetch(`${SUPABASE_URL}/events?id=eq.${eventId}`, {
     headers: supabaseHeaders,
   });
+
+  if (!response.ok) {
+    throw new Error("Eventet kunne ikke hentes");
+  }
 
   const data = await response.json();
 
