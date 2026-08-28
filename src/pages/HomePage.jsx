@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { getEvents } from "../services/events";
+import LoadingState from "../components/LoadingState";
 
 export default function HomePage() {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadEvents() {
       const data = await getEvents();
       setEvents(data);
+      setIsLoading(false);
     }
 
     loadEvents();
@@ -39,6 +42,10 @@ export default function HomePage() {
     });
 
     return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+  }
+
+  if (isLoading) {
+    return <LoadingState message="Indlæser events..." />;
   }
 
   return (

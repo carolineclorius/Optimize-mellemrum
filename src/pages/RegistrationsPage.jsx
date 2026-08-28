@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import { getRegistrations } from "../services/registrations";
+import LoadingState from "../components/LoadingState";
 
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState([]);
   const [registrationCount, setRegistrationCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadRegistrations() {
       const data = await getRegistrations();
       setRegistrations(data);
       setRegistrationCount(data.length);
+      setIsLoading(false);
     }
 
     loadRegistrations();
   }, []);
+
+  if (isLoading) {
+    return <LoadingState message="Indlæser tilmeldinger..." />;
+  }
 
   return (
     <>
