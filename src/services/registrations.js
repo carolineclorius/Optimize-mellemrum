@@ -8,6 +8,10 @@ export async function getRegistrations() {
     },
   );
 
+  if (!response.ok) {
+    throw new Error("Tilmeldingerne kunne ikke hentes");
+  }
+
   return response.json();
 }
 

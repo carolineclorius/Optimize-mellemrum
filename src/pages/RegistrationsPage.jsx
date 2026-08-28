@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
 import { getRegistrations } from "../services/registrations";
 import LoadingState from "../components/LoadingState";
+import ErrorState from "../components/ErrorState";
 
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState([]);
   const [registrationCount, setRegistrationCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function loadRegistrations() {
-      const data = await getRegistrations();
-      setRegistrations(data);
-      setRegistrationCount(data.length);
-      setIsLoading(false);
+      try {
+        const data = await getRegistrations();
+        setRegistrations(data);
+        setRegistrationCount(data.length);
+      } catch {
+        setErrorMessage(
+          "Tilmeldingerne kunne ikke hentes. Prøv at genindlæse siden.",
+        );
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     loadRegistrations();
@@ -20,6 +29,10 @@ export default function RegistrationsPage() {
 
   if (isLoading) {
     return <LoadingState message="Indlæser tilmeldinger..." />;
+  }
+
+  if (errorMessage) {
+    return <ErrorState message={errorMessage} />;
   }
 
   return (

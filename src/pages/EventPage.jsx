@@ -6,6 +6,7 @@ import successIcon from "../assets/success-icon.svg";
 import errorIcon from "../assets/error-icon.svg";
 import warningIcon from "../assets/warning-icon.svg";
 import LoadingState from "../components/LoadingState";
+import ErrorState from "../components/ErrorState";
 
 export default function EventPage() {
   const { eventId } = useParams();
@@ -15,11 +16,19 @@ export default function EventPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [validationMessage, setValidationMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     async function loadEvent() {
-      const data = await getEventById(eventId);
-      setEvent(data);
+      try {
+        const data = await getEventById(eventId);
+        setEvent(data);
+      } catch {
+        setLoadError("Eventet kunne ikke hentes. Prøv at genindlæse siden.");
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     loadEvent();
@@ -67,8 +76,16 @@ export default function EventPage() {
     }
   }
 
-  if (!event) {
+  if (isLoading) {
     return <LoadingState message="Indlæser event..." />;
+  }
+
+  if (loadError) {
+    return <ErrorState message={loadError} />;
+  }
+
+  if (!event) {
+    return <ErrorState message="Eventet blev ikke fundet." />;
   }
 
   const date = new Date(event.date);
