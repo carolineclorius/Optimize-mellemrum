@@ -17,6 +17,7 @@
   --green: #173f35;
   --lime: #d8ff62;
   --orange: #ff785a;
+  --warning: #8a5a00;
   --error: #9f2d20;
   --line: rgba(23, 32, 29, 0.18);
   --shadow: 0 18px 50px rgba(23, 32, 29, 0.09);
@@ -748,12 +749,11 @@ select:focus {
   width: auto;
 }
 
-.registration-error {
+.registration-error,
+.registration-warning {
   align-items: center;
   background: var(--paper);
-  border: 2px solid var(--error);
-  border-radius: 8px;
-  color: var(--error);
+  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -762,10 +762,20 @@ select:focus {
   text-align: center;
 }
 
-.registration-error__icon {
+.registration-error {
+  border: 2px solid var(--error);
+  color: var(--error);
+}
+
+.registration-warning {
+  color: var(--warning);
+  border: 2px solid var(--warning);
+}
+
+.registration-error__icon,
+.registration-warning__icon {
   display: block;
   height: 4rem;
-  margin-bottom: 1.5rem;
   width: auto;
 }
 

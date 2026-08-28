@@ -4,6 +4,7 @@ import { getEventById } from "../services/events";
 import { createRegistration } from "../services/registrations";
 import successIcon from "../assets/success-icon.svg";
 import errorIcon from "../assets/error-icon.svg";
+import warningIcon from "../assets/warning-icon.svg";
 
 export default function EventPage() {
   const { eventId } = useParams();
@@ -12,6 +13,7 @@ export default function EventPage() {
   const [email, setEmail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [validationMessage, setValidationMessage] = useState("");
 
   useEffect(() => {
     async function loadEvent() {
@@ -25,6 +27,29 @@ export default function EventPage() {
   async function handleSubmit(eventSubmit) {
     eventSubmit.preventDefault();
     setErrorMessage("");
+    setValidationMessage("");
+
+    if (!name.trim() && !email.trim()) {
+      setValidationMessage("Udfyld både navn og e-mail.");
+      return;
+    }
+
+    if (!name.trim()) {
+      setValidationMessage("Udfyld dit navn.");
+      return;
+    }
+
+    if (!email.trim()) {
+      setValidationMessage("Udfyld din e-mail.");
+      return;
+    }
+
+    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!emailIsValid) {
+      setValidationMessage("Indtast en gyldig e-mailadresse.");
+      return;
+    }
 
     try {
       await createRegistration({
@@ -126,7 +151,20 @@ export default function EventPage() {
                   Udfyld formularen, så sender vi din tilmelding til arrangøren.
                 </p>
               </div>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} noValidate>
+                {validationMessage && (
+                  <div className="registration-warning" role="alert">
+                    <img
+                      className="registration-warning__icon"
+                      src={warningIcon}
+                      alt=""
+                      aria-hidden="true"
+                    />
+
+                    <p>{validationMessage}</p>
+                  </div>
+                )}
+
                 {errorMessage && (
                   <div className="registration-error" role="alert">
                     <img
@@ -142,16 +180,22 @@ export default function EventPage() {
                 <label>
                   Navn
                   <input
+                    type="text"
                     value={name}
                     onChange={(inputEvent) => setName(inputEvent.target.value)}
+                    required
                   />
                 </label>
-                <span>E-mail</span>
-                <input
-                  value={email}
-                  onChange={(inputEvent) => setEmail(inputEvent.target.value)}
-                  placeholder="dig@example.com"
-                />
+                <label>
+                  E-mail
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(inputEvent) => setEmail(inputEvent.target.value)}
+                    placeholder="dig@example.com"
+                    required
+                  />
+                </label>
                 <button type="submit">Tilmeld mig</button>
               </form>
             </>
