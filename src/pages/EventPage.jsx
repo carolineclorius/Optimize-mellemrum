@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { getEventById } from "../services/events";
-import { createRegistration } from "../services/registrations";
+import {
+  createRegistration,
+  registrationExists,
+} from "../services/registrations";
 import successIcon from "../assets/success-icon.svg";
 import errorIcon from "../assets/error-icon.svg";
 import warningIcon from "../assets/warning-icon.svg";
@@ -18,6 +21,7 @@ export default function EventPage() {
   const [validationMessage, setValidationMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function loadEvent() {
@@ -61,10 +65,21 @@ export default function EventPage() {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
+      const alreadyRegistered = await registrationExists(email, event.id);
+
+      if (alreadyRegistered) {
+        setValidationMessage(
+          `Du er allerede tilmeldt eventet "${event.title}".`,
+        );
+        return;
+      }
+
       await createRegistration({
-        name: name,
-        email: email,
+        name: name.trim(),
+        email: email.trim(),
         status: "Ny",
         eventId: event.id,
       });
@@ -73,6 +88,8 @@ export default function EventPage() {
       setEmail("");
     } catch {
       setErrorMessage("Tilmeldingen mislykkedes. Prøv igen.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -220,7 +237,9 @@ export default function EventPage() {
                     required
                   />
                 </label>
-                <button type="submit">Tilmeld mig</button>
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Tilmelder..." : "Tilmeld mig"}
+                </button>
               </form>
             </>
           )}
