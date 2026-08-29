@@ -10,7 +10,7 @@ export default function Footer() {
           </p>
           <p>Udvalgte kulturoplevelser og nye perspektiver på Aarhus.</p>
         </div>
-        <nav className="footer-links" aria-label="Footer">
+        <nav className="footer-links" aria-label="Navigation i sidefod">
           <div className="footer-link-group">
             <p className="footer-heading">Udforsk</p>
             <Link to="/">Events</Link>

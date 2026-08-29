@@ -2,8 +2,12 @@ import { NavLink } from "react-router";
 
 export default function Navbar() {
   return (
-    <nav className="site-nav">
-      <NavLink className="brand" to="/">
+    <nav className="site-nav" aria-label="Primær navigation">
+      <NavLink
+        className="brand"
+        to="/"
+        aria-label="Mellemrum - gå til forsiden"
+      >
         mellemrum<span>.</span>
       </NavLink>
       <div className="nav-links">

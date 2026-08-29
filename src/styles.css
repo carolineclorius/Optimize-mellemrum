@@ -236,6 +236,21 @@ select:focus {
   outline: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--green);
+}
+
+.signup-panel button:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: -6px;
+  box-shadow: 0 0 0 3px var(--green);
+}
+
 .event-grid {
   display: grid;
   gap: 1.5rem;
