@@ -77,12 +77,12 @@ export default function HomePage() {
         <section className="section-heading">
           <div>
             <p className="eyebrow dark">Det sker</p>
-            <h2>Kommende events</h2>
+            <h2 id="events-title">Kommende events</h2>
           </div>
           <p>Kuraterede oplevelser i byen – fra små scener til store idéer.</p>
         </section>
 
-        <section className="filters">
+        <section className="filters" aria-label="Filtrér events">
           <label>
             Søg
             <input
@@ -105,7 +105,7 @@ export default function HomePage() {
           </label>
         </section>
 
-        <section className="event-grid">
+        <section className="event-grid" aria-labelledby="events-title">
           {filteredEvents.map((event) => (
             <article className="event-card" key={event.id}>
               <img src={event.image} alt="" />
@@ -117,7 +117,11 @@ export default function HomePage() {
                   <span>{formatEventDate(event.date)}</span>
                   <span>{event.venueName}</span>
                 </div>
-                <Link className="card-link" to={`/events/${event.id}`}>
+                <Link
+                  className="card-link"
+                  to={`/events/${event.id}`}
+                  aria-label={`Læs mere om ${event.title}`}
+                >
                   Læs mere
                 </Link>
               </div>

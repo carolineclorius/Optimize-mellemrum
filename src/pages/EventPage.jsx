@@ -97,11 +97,11 @@ export default function EventPage() {
           ← Alle events
         </Link>
 
-        <section className="event-detail">
+        <section className="event-detail" aria-labelledby="event-title">
           <img src={event.image} alt="" />
           <div className="event-detail-content">
             <p className="event-category">{event.category}</p>
-            <h1>{event.title}</h1>
+            <h1 id="event-title">{event.title}</h1>
             <p className="lead">{event.summary}</p>
             <div className="detail-list">
               <p>
@@ -127,7 +127,12 @@ export default function EventPage() {
                   {event.venueWebsite && (
                     <>
                       <br />
-                      <a href={event.venueWebsite}>Besøg venue</a>
+                      <a
+                        href={event.venueWebsite}
+                        aria-label={`Besøg hjemmesiden for ${event.venueName}`}
+                      >
+                        Besøg venue
+                      </a>
                     </>
                   )}
                 </span>
@@ -143,6 +148,7 @@ export default function EventPage() {
 
         <section
           className={`signup-panel ${successMessage ? "signup-panel--success" : ""}`}
+          aria-labelledby="signup-title"
         >
           {successMessage ? (
             <div
@@ -157,14 +163,14 @@ export default function EventPage() {
                 aria-hidden="true"
               />
 
-              <h2>Din plads er reserveret</h2>
+              <h2 id="signup-title">Din plads er reserveret</h2>
               <p className="registration-success__event">{event.title}</p>
             </div>
           ) : (
             <>
               <div>
                 <p className="eyebrow dark">Tilmelding</p>
-                <h2>Reserver din plads</h2>
+                <h2 id="signup-title">Reserver din plads</h2>
                 <p>
                   Udfyld formularen, så sender vi din tilmelding til arrangøren.
                 </p>

@@ -43,28 +43,34 @@ export default function RegistrationsPage() {
         <p>{registrationCount} tilmeldinger i alt</p>
       </header>
       <main>
-        <div className="registration-list">
-          <div className="registration-row registration-labels">
-            <span>Navn</span>
-            <span>Event</span>
-            <span>Dato</span>
-            <span>Status</span>
+        <div
+          className="registration-list"
+          role="table"
+          aria-label="Oversigt over tilmeldinger"
+        >
+          <div className="registration-row registration-labels" role="row">
+            <span role="columnheader">Navn</span>
+            <span role="columnheader">Event</span>
+            <span role="columnheader">Dato</span>
+            <span role="columnheader">Status</span>
           </div>
           {registrations.map((registration) => (
-            <div className="registration-row" key={registration.id}>
-              <div>
+            <div className="registration-row" role="row" key={registration.id}>
+              <div role="cell">
                 <strong>{registration.name}</strong>
                 <small>{registration.email}</small>
               </div>
-              <span>
+              <span role="cell">
                 {registration.event?.title ?? registration.eventTitle}
               </span>
-              <span>
+              <span role="cell">
                 {new Date(
                   registration.event?.date ?? registration.eventDate,
                 ).toLocaleDateString("da-DK")}
               </span>
-              <span className="status">{registration.status}</span>
+              <span className="status" role="cell">
+                {registration.status}
+              </span>
             </div>
           ))}
         </div>
