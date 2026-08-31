@@ -115,7 +115,7 @@ export default function EventPage() {
         </Link>
 
         <section className="event-detail" aria-labelledby="event-title">
-          <img src={event.image} alt="" />
+          <img src={event.image} alt="" fetchPriority="high" />
           <div className="event-detail-content">
             <p className="event-category">{event.category}</p>
             <h1 id="event-title">{event.title}</h1>
