@@ -93,19 +93,7 @@ export default function EventPage() {
     }
   }
 
-  if (isLoading) {
-    return <LoadingState message="Indlæser event..." />;
-  }
-
-  if (loadError) {
-    return <ErrorState message={loadError} />;
-  }
-
-  if (!event) {
-    return <ErrorState message="Eventet blev ikke fundet." />;
-  }
-
-  const date = new Date(event.date);
+  const date = event ? new Date(event.date) : null;
 
   return (
     <>
@@ -114,136 +102,151 @@ export default function EventPage() {
           ← Alle events
         </Link>
 
-        <section className="event-detail" aria-labelledby="event-title">
-          <img src={event.image} alt="" fetchPriority="high" />
-          <div className="event-detail-content">
-            <p className="event-category">{event.category}</p>
-            <h1 id="event-title">{event.title}</h1>
-            <p className="lead">{event.summary}</p>
-            <div className="detail-list">
-              <p>
-                <strong>Dato</strong>
-                {date.toLocaleDateString("da-DK", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                })}{" "}
-                kl.{" "}
-                {date.toLocaleTimeString("da-DK", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-              <p>
-                <strong>Sted</strong>
-                <span>
-                  {event.venueName}
-                  <br />
-                  {event.venueAddress}, {event.venuePostalCode}{" "}
-                  {event.venueCity}
-                  {event.venueWebsite && (
-                    <>
+        {isLoading ? (
+          <LoadingState message="Indlæser event..." />
+        ) : loadError ? (
+          <ErrorState message={loadError} />
+        ) : !event ? (
+          <ErrorState message="Eventet blev ikke fundet." />
+        ) : (
+          <>
+            <section className="event-detail" aria-labelledby="event-title">
+              <img src={event.image} alt="" fetchPriority="high" />
+              <div className="event-detail-content">
+                <p className="event-category">{event.category}</p>
+                <h1 id="event-title">{event.title}</h1>
+                <p className="lead">{event.summary}</p>
+                <div className="detail-list">
+                  <p>
+                    <strong>Dato</strong>
+                    {date.toLocaleDateString("da-DK", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                    })}{" "}
+                    kl.{" "}
+                    {date.toLocaleTimeString("da-DK", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                  <p>
+                    <strong>Sted</strong>
+                    <span>
+                      {event.venueName}
                       <br />
-                      <a
-                        href={event.venueWebsite}
-                        aria-label={`Besøg hjemmesiden for ${event.venueName}`}
-                      >
-                        Besøg venue
-                      </a>
-                    </>
-                  )}
-                </span>
-              </p>
-              <p>
-                <strong>Pris</strong>
-                {event.price === 0 ? "Gratis" : `${event.price} kr.`}
-              </p>
-            </div>
-            <p>{event.description}</p>
-          </div>
-        </section>
-
-        <section
-          className={`signup-panel ${successMessage ? "signup-panel--success" : ""}`}
-          aria-labelledby="signup-title"
-        >
-          {successMessage ? (
-            <div
-              className="registration-success"
-              role="status"
-              aria-live="polite"
-            >
-              <img
-                className="registration-success__icon"
-                src={successIcon}
-                alt=""
-                aria-hidden="true"
-              />
-
-              <h2 id="signup-title">Din plads er reserveret</h2>
-              <p className="registration-success__event">{event.title}</p>
-            </div>
-          ) : (
-            <>
-              <div>
-                <p className="eyebrow dark">Tilmelding</p>
-                <h2 id="signup-title">Reserver din plads</h2>
-                <p>
-                  Udfyld formularen, så sender vi din tilmelding til arrangøren.
-                </p>
+                      {event.venueAddress}, {event.venuePostalCode}{" "}
+                      {event.venueCity}
+                      {event.venueWebsite && (
+                        <>
+                          <br />
+                          <a
+                            href={event.venueWebsite}
+                            aria-label={`Besøg hjemmesiden for ${event.venueName}`}
+                          >
+                            Besøg venue
+                          </a>
+                        </>
+                      )}
+                    </span>
+                  </p>
+                  <p>
+                    <strong>Pris</strong>
+                    {event.price === 0 ? "Gratis" : `${event.price} kr.`}
+                  </p>
+                </div>
+                <p>{event.description}</p>
               </div>
-              <form onSubmit={handleSubmit} noValidate>
-                {validationMessage && (
-                  <div className="registration-warning" role="alert">
-                    <img
-                      className="registration-warning__icon"
-                      src={warningIcon}
-                      alt=""
-                      aria-hidden="true"
-                    />
+            </section>
 
-                    <p>{validationMessage}</p>
-                  </div>
-                )}
-
-                {errorMessage && (
-                  <div className="registration-error" role="alert">
-                    <img
-                      className="registration-error__icon"
-                      src={errorIcon}
-                      alt=""
-                      aria-hidden="true"
-                    />
-
-                    <p>{errorMessage}</p>
-                  </div>
-                )}
-                <label>
-                  Navn
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(inputEvent) => setName(inputEvent.target.value)}
-                    required
+            <section
+              className={`signup-panel ${successMessage ? "signup-panel--success" : ""}`}
+              aria-labelledby="signup-title"
+            >
+              {successMessage ? (
+                <div
+                  className="registration-success"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <img
+                    className="registration-success__icon"
+                    src={successIcon}
+                    alt=""
+                    aria-hidden="true"
                   />
-                </label>
-                <label>
-                  E-mail
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(inputEvent) => setEmail(inputEvent.target.value)}
-                    placeholder="dig@example.com"
-                    required
-                  />
-                </label>
-                <button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Tilmelder..." : "Tilmeld mig"}
-                </button>
-              </form>
-            </>
-          )}
-        </section>
+
+                  <h2 id="signup-title">Din plads er reserveret</h2>
+                  <p className="registration-success__event">{event.title}</p>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <p className="eyebrow dark">Tilmelding</p>
+                    <h2 id="signup-title">Reserver din plads</h2>
+                    <p>
+                      Udfyld formularen, så sender vi din tilmelding til
+                      arrangøren.
+                    </p>
+                  </div>
+                  <form onSubmit={handleSubmit} noValidate>
+                    {validationMessage && (
+                      <div className="registration-warning" role="alert">
+                        <img
+                          className="registration-warning__icon"
+                          src={warningIcon}
+                          alt=""
+                          aria-hidden="true"
+                        />
+
+                        <p>{validationMessage}</p>
+                      </div>
+                    )}
+
+                    {errorMessage && (
+                      <div className="registration-error" role="alert">
+                        <img
+                          className="registration-error__icon"
+                          src={errorIcon}
+                          alt=""
+                          aria-hidden="true"
+                        />
+
+                        <p>{errorMessage}</p>
+                      </div>
+                    )}
+                    <label>
+                      Navn
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(inputEvent) =>
+                          setName(inputEvent.target.value)
+                        }
+                        required
+                      />
+                    </label>
+                    <label>
+                      E-mail
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(inputEvent) =>
+                          setEmail(inputEvent.target.value)
+                        }
+                        placeholder="dig@example.com"
+                        required
+                      />
+                    </label>
+                    <button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Tilmelder..." : "Tilmeld mig"}
+                    </button>
+                  </form>
+                </>
+              )}
+            </section>
+          </>
+        )}
       </main>
     </>
   );

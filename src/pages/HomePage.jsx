@@ -51,14 +51,6 @@ export default function HomePage() {
     return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
   }
 
-  if (isLoading) {
-    return <LoadingState message="Indlæser events..." />;
-  }
-
-  if (errorMessage) {
-    return <ErrorState message={errorMessage} />;
-  }
-
   return (
     <>
       <header className="hero">
@@ -105,33 +97,39 @@ export default function HomePage() {
           </label>
         </section>
 
-        <section className="event-grid" aria-labelledby="events-title">
-          {filteredEvents.map((event, index) => (
-            <article className="event-card" key={event.id}>
-              <img
-                src={event.image}
-                alt=""
-                loading={index < 3 ? "eager" : "lazy"}
-              />
-              <div className="event-card-content">
-                <p className="event-category">{event.category}</p>
-                <h3>{event.title}</h3>
-                <p>{event.summary}</p>
-                <div className="event-meta">
-                  <span>{formatEventDate(event.date)}</span>
-                  <span>{event.venueName}</span>
+        {isLoading ? (
+          <LoadingState message="Indlæser events..." />
+        ) : errorMessage ? (
+          <ErrorState message={errorMessage} />
+        ) : (
+          <section className="event-grid" aria-labelledby="events-title">
+            {filteredEvents.map((event, index) => (
+              <article className="event-card" key={event.id}>
+                <img
+                  src={event.image}
+                  alt=""
+                  loading={index < 3 ? "eager" : "lazy"}
+                />
+                <div className="event-card-content">
+                  <p className="event-category">{event.category}</p>
+                  <h3>{event.title}</h3>
+                  <p>{event.summary}</p>
+                  <div className="event-meta">
+                    <span>{formatEventDate(event.date)}</span>
+                    <span>{event.venueName}</span>
+                  </div>
+                  <Link
+                    className="card-link"
+                    to={`/events/${event.id}`}
+                    aria-label={`Læs mere om ${event.title}`}
+                  >
+                    Læs mere
+                  </Link>
                 </div>
-                <Link
-                  className="card-link"
-                  to={`/events/${event.id}`}
-                  aria-label={`Læs mere om ${event.title}`}
-                >
-                  Læs mere
-                </Link>
-              </div>
-            </article>
-          ))}
-        </section>
+              </article>
+            ))}
+          </section>
+        )}
       </main>
     </>
   );
