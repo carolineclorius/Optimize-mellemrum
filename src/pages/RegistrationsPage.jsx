@@ -27,6 +27,18 @@ export default function RegistrationsPage() {
     loadRegistrations();
   }, []);
 
+  const groupedRegistrations = registrations.reduce((groups, registration) => {
+    const eventId = registration.eventId;
+
+    if (!groups[eventId]) {
+      groups[eventId] = [];
+    }
+
+    groups[eventId].push(registration);
+
+    return groups;
+  }, {});
+
   if (isLoading) {
     return <LoadingState message="Indlæser tilmeldinger..." />;
   }
@@ -43,36 +55,66 @@ export default function RegistrationsPage() {
         <p>{registrationCount} tilmeldinger i alt</p>
       </header>
       <main>
-        <div
-          className="registration-list"
-          role="table"
-          aria-label="Oversigt over tilmeldinger"
-        >
-          <div className="registration-row registration-labels" role="row">
-            <span role="columnheader">Navn</span>
-            <span role="columnheader">Event</span>
-            <span role="columnheader">Dato</span>
-            <span role="columnheader">Status</span>
-          </div>
-          {registrations.map((registration) => (
-            <div className="registration-row" role="row" key={registration.id}>
-              <div role="cell">
-                <strong>{registration.name}</strong>
-                <small>{registration.email}</small>
-              </div>
-              <span role="cell">
-                {registration.event?.title ?? registration.eventTitle}
-              </span>
-              <span role="cell">
-                {new Date(
-                  registration.event?.date ?? registration.eventDate,
-                ).toLocaleDateString("da-DK")}
-              </span>
-              <span className="status" role="cell">
-                {registration.status}
-              </span>
-            </div>
-          ))}
+        <div className="registration-groups">
+          {Object.entries(groupedRegistrations).map(
+            ([eventId, eventRegistrations]) => {
+              const event = eventRegistrations[0].event;
+
+              return (
+                <section className="registration-group" key={eventId}>
+                  <div className="registration-group-header">
+                    <h2>{event?.title ?? eventRegistrations[0].eventTitle}</h2>
+
+                    <div className="registration-group-info">
+                      <p>
+                        {new Date(
+                          event?.date ?? eventRegistrations[0].eventDate,
+                        ).toLocaleDateString("da-DK")}
+                      </p>
+
+                      <p>{event?.venueName}</p>
+
+                      <p className="registration-count">
+                        {eventRegistrations.length}{" "}
+                        {eventRegistrations.length === 1
+                          ? "tilmeldt"
+                          : "tilmeldte"}
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="registration-list"
+                    role="table"
+                    aria-label="Oversigt over tilmeldinger"
+                  >
+                    <div
+                      className="registration-row registration-labels"
+                      role="row"
+                    >
+                      <span role="columnheader">Navn</span>
+                      <span role="columnheader">Email</span>
+                      <span role="columnheader">Status</span>
+                    </div>
+                    {eventRegistrations.map((registration) => (
+                      <div
+                        className="registration-row"
+                        role="row"
+                        key={registration.id}
+                      >
+                        <span role="cell">{registration.name}</span>
+
+                        <span role="cell">{registration.email}</span>
+
+                        <span className="status" role="cell">
+                          {registration.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              );
+            },
+          )}
         </div>
       </main>
     </>

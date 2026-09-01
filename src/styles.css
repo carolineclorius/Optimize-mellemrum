@@ -181,7 +181,8 @@ main {
 }
 
 .section-heading h2,
-.signup-panel h2 {
+.signup-panel h2,
+.registration-group-header h2 {
   font-size: clamp(2.2rem, 4vw, 4rem);
   letter-spacing: -0.055em;
   line-height: 1;
@@ -716,6 +717,42 @@ select:focus-visible {
   margin: 0;
 }
 
+.registration-group {
+  background: var(--cream);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.registration-group-header {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.registration-group-header h2 {
+  margin-bottom: 1rem;
+}
+
+.registration-group-info {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.registration-group-info p + p {
+  border-left: 1px solid var(--line);
+  padding-left: 1rem;
+}
+
+.registration-group-header p {
+  margin: 0;
+}
+
+.registration-count {
+  font-weight: 700;
+}
+
 .registration-list {
   background: white;
   border: 1px solid var(--line);
@@ -729,7 +766,7 @@ select:focus-visible {
   border-bottom: 1px solid var(--line);
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1.2fr 1.5fr 0.7fr 0.5fr;
+  grid-template-columns: 1fr 1.3fr 0.7fr;
   padding: 1rem 1.2rem;
 }
 
@@ -737,18 +774,8 @@ select:focus-visible {
   border-bottom: 0;
 }
 
-.registration-row strong,
-.registration-row small {
-  display: block;
-}
-
-.registration-row small {
-  color: #65706c;
-  margin-top: 0.2rem;
-}
-
 .registration-labels {
-  background: var(--cream);
+  background: var(--paper);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
