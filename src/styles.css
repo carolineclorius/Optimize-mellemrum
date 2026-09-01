@@ -176,6 +176,10 @@ main {
   margin-bottom: 2.5rem;
 }
 
+#events {
+  scroll-margin-top: 6rem;
+}
+
 .section-heading h2,
 .signup-panel h2 {
   font-size: clamp(2.2rem, 4vw, 4rem);

@@ -48,7 +48,9 @@ export default function AboutPage() {
                 Find lokale oplevelser, få det vigtigste overblik, og tilmeld
                 dig uden unødige omveje.
               </p>
-              <Link to="/">Udforsk kommende events →</Link>
+              <Link to="/" state={{ scrollToEvents: true }}>
+                Udforsk kommende events →
+              </Link>
             </article>
             <article>
               <span>For arrangører</span>
@@ -104,7 +106,7 @@ export default function AboutPage() {
               Mellemrum peger på steder, idéer og fællesskaber på tværs af byen
               — fra små scener til store tanker.
             </p>
-            <Link className="about-cta" to="/">
+            <Link className="about-cta" to="/" state={{ scrollToEvents: true }}>
               Se kommende events →
             </Link>
           </div>
