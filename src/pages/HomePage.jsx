@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { getEvents } from "../services/events";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 
 export default function HomePage() {
+  const { state } = useLocation();
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (state?.scrollToEvents && !isLoading) {
+      const eventsSection = document.getElementById("events");
+
+      eventsSection?.scrollIntoView({
+        block: "start",
+        behavior: "instant",
+      });
+    }
+  }, [state, isLoading]);
 
   useEffect(() => {
     async function loadEvents() {
@@ -65,8 +77,8 @@ export default function HomePage() {
         </a>
       </header>
 
-      <main id="events">
-        <section className="section-heading">
+      <main>
+        <section className="section-heading" id="events">
           <div>
             <p className="eyebrow dark">Det sker</p>
             <h2 id="events-title">Kommende events</h2>
