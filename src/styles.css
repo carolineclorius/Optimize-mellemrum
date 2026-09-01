@@ -257,6 +257,12 @@ select:focus-visible {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.event-card-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
 .event-card {
   background: white;
   border: 1px solid var(--line);

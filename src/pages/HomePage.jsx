@@ -104,29 +104,30 @@ export default function HomePage() {
         ) : (
           <section className="event-grid" aria-labelledby="events-title">
             {filteredEvents.map((event, index) => (
-              <article className="event-card" key={event.id}>
-                <img
-                  src={event.image}
-                  alt=""
-                  loading={index < 3 ? "eager" : "lazy"}
-                />
-                <div className="event-card-content">
-                  <p className="event-category">{event.category}</p>
-                  <h3>{event.title}</h3>
-                  <p>{event.summary}</p>
-                  <div className="event-meta">
-                    <span>{formatEventDate(event.date)}</span>
-                    <span>{event.venueName}</span>
+              <Link
+                className="event-card-link"
+                to={`/events/${event.id}`}
+                key={event.id}
+                aria-label={`Læs mere om ${event.title}`}
+              >
+                <article className="event-card">
+                  <img
+                    src={event.image}
+                    alt=""
+                    loading={index < 3 ? "eager" : "lazy"}
+                  />
+                  <div className="event-card-content">
+                    <p className="event-category">{event.category}</p>
+                    <h3>{event.title}</h3>
+                    <p>{event.summary}</p>
+                    <div className="event-meta">
+                      <span>{formatEventDate(event.date)}</span>
+                      <span>{event.venueName}</span>
+                    </div>
+                    <span className="card-link">Læs mere</span>
                   </div>
-                  <Link
-                    className="card-link"
-                    to={`/events/${event.id}`}
-                    aria-label={`Læs mere om ${event.title}`}
-                  >
-                    Læs mere
-                  </Link>
-                </div>
-              </article>
+                </article>
+              </Link>
             ))}
           </section>
         )}
