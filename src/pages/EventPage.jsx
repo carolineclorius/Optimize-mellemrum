@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { getEventById } from "../services/events";
 import {
   createRegistration,
+  getRegistrationCount,
   registrationExists,
 } from "../services/registrations";
 import successIcon from "../assets/success-icon.svg";
@@ -16,6 +17,7 @@ export default function EventPage() {
   const [event, setEvent] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [registrationCount, setRegistrationCount] = useState(0);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [validationMessage, setValidationMessage] = useState("");
@@ -26,8 +28,13 @@ export default function EventPage() {
   useEffect(() => {
     async function loadEvent() {
       try {
-        const data = await getEventById(eventId);
-        setEvent(data);
+        const [eventData, registrationCountData] = await Promise.all([
+          getEventById(eventId),
+          getRegistrationCount(eventId),
+        ]);
+
+        setEvent(eventData);
+        setRegistrationCount(registrationCountData);
       } catch {
         setLoadError("Eventet kunne ikke hentes. Prøv at genindlæse siden.");
       } finally {
@@ -42,6 +49,11 @@ export default function EventPage() {
     eventSubmit.preventDefault();
     setErrorMessage("");
     setValidationMessage("");
+
+    if (availableSpots <= 0) {
+      setValidationMessage("Eventet er udsolgt.");
+      return;
+    }
 
     if (!name.trim() && !email.trim()) {
       setValidationMessage("Udfyld både navn og e-mail.");
@@ -83,6 +95,7 @@ export default function EventPage() {
         status: "Ny",
         eventId: event.id,
       });
+      setRegistrationCount((count) => count + 1);
       setSuccessMessage("Tilmeldingen er gennemført.");
       setName("");
       setEmail("");
@@ -94,6 +107,9 @@ export default function EventPage() {
   }
 
   const date = event ? new Date(event.date) : null;
+  const availableSpots = event
+    ? Math.max(0, event.capacity - registrationCount)
+    : 0;
 
   return (
     <>
@@ -155,6 +171,15 @@ export default function EventPage() {
                     {event.price === 0 ? "Gratis" : `${event.price} kr.`}
                   </p>
                 </div>
+                {availableSpots < 10 && (
+                  <p
+                    className={`available-spots ${
+                      availableSpots <= 0 ? "available-spots--sold-out" : ""
+                    }`}
+                  >
+                    {availableSpots <= 0 ? "Udsolgt" : "Få pladser tilbage"}
+                  </p>
+                )}
                 <p>{event.description}</p>
               </div>
             </section>
@@ -178,6 +203,14 @@ export default function EventPage() {
 
                   <h2 id="signup-title">Din plads er reserveret</h2>
                   <p className="registration-success__event">{event.title}</p>
+                </div>
+              ) : availableSpots <= 0 ? (
+                <div>
+                  <p className="eyebrow dark">Tilmelding</p>
+                  <h2 id="signup-title">Eventet er udsolgt</h2>
+                  <p>
+                    Der er desværre ikke flere ledige pladser til dette event.
+                  </p>
                 </div>
               ) : (
                 <>

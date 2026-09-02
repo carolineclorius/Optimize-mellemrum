@@ -19,6 +19,8 @@
   --orange: #ff785a;
   --warning: #8a5a00;
   --error: #9f2d20;
+  --spots-available: #dcebdd;
+  --spots-sold-out: #f6dada;
   --line: rgba(23, 32, 29, 0.18);
   --shadow: 0 18px 50px rgba(23, 32, 29, 0.09);
   --page-gutter: clamp(1.25rem, 4vw, 4rem);
@@ -329,6 +331,36 @@ select:focus-visible {
   justify-content: space-between;
   margin-top: auto;
   padding-top: 1rem;
+}
+
+.available-spots {
+  background: var(--spots-available);
+  color: var(--green);
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1rem 0 0;
+  padding: 0.5rem 1rem;
+}
+
+.available-spots--sold-out {
+  background: var(--spots-sold-out);
+  color: var(--error);
+}
+
+.event-card-content > p.available-spots--sold-out {
+  color: var(--error);
+}
+
+.event-detail-content .available-spots {
+  margin-bottom: 1.5rem;
+}
+
+.registration-count--sold-out {
+  background: var(--spots-sold-out);
+  border-radius: 1rem;
+  color: var(--error);
+  padding: 0.5rem 1rem;
 }
 
 .card-link {

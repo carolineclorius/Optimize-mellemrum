@@ -2,7 +2,7 @@ import { SUPABASE_URL, supabaseHeaders } from "./supabase";
 
 export async function getRegistrations() {
   const response = await fetch(
-    `${SUPABASE_URL}/registrations?select=*,event:events(title,date,venueName)&order=createdAt.desc`,
+    `${SUPABASE_URL}/registrations?select=*,event:events(title,date,venueName,capacity)&order=createdAt.desc`,
     {
       headers: supabaseHeaders,
     },
@@ -13,6 +13,40 @@ export async function getRegistrations() {
   }
 
   return response.json();
+}
+
+export async function getRegistrationEventIds() {
+  const response = await fetch(`${SUPABASE_URL}/registrations?select=eventId`, {
+    headers: supabaseHeaders,
+  });
+
+  if (!response.ok) {
+    throw new Error("Antal tilmeldinger kunne ikke hentes");
+  }
+
+  return response.json();
+}
+
+export async function getRegistrationCount(eventId) {
+  const params = new URLSearchParams({
+    select: "id",
+    eventId: `eq.${eventId}`,
+  });
+
+  const response = await fetch(
+    `${SUPABASE_URL}/registrations?${params.toString()}`,
+    {
+      headers: supabaseHeaders,
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Antal tilmeldinger kunne ikke hentes");
+  }
+
+  const data = await response.json();
+
+  return data.length;
 }
 
 export async function registrationExists(email, eventId) {
