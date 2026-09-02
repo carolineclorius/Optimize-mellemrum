@@ -484,6 +484,10 @@ select:focus-visible {
   padding: clamp(2rem, 5vw, 4.5rem);
 }
 
+.about-page .about-audiences-eyebrow {
+  color: var(--lime);
+}
+
 .about-audiences .about-section-heading h2 {
   max-width: 13ch;
 }
