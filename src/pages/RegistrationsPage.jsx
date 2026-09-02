@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getRegistrations } from "../services/registrations";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
+import "./RegistrationsPage.css";
 
 export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState([]);

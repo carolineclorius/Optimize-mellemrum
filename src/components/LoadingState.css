@@ -1,0 +1,22 @@
+/* Loading state styles */
+.loading-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  min-height: 50vh;
+  padding: 3rem var(--page-gutter);
+  text-align: center;
+}
+
+.loading-state__animation {
+  display: block;
+  height: 6rem;
+  width: 6rem;
+}
+
+.loading-state p {
+  color: var(--green);
+  margin: 0;
+}

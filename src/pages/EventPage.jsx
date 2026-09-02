@@ -11,6 +11,7 @@ import errorIcon from "../assets/error-icon.svg";
 import warningIcon from "../assets/warning-icon.svg";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
+import "./EventPage.css";
 
 export default function EventPage() {
   const { eventId } = useParams();

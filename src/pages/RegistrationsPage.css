@@ -1,0 +1,97 @@
+.admin-header h1 {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: 0.95;
+  margin: 0;
+}
+
+.registration-group {
+  background: var(--cream);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+}
+
+.registration-group-header {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.registration-group-header h2 {
+  margin-bottom: 1rem;
+}
+
+.registration-group-info {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.registration-group-info p + p {
+  border-left: 1px solid var(--line);
+  padding-left: 1rem;
+}
+
+.registration-group-header p {
+  margin: 0;
+}
+
+.registration-count {
+  font-weight: 700;
+}
+
+.registration-list {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 8px 26px rgba(23, 32, 29, 0.05);
+  overflow: hidden;
+}
+
+.registration-row {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1.3fr 0.7fr;
+  padding: 1rem 1.2rem;
+}
+
+.registration-row:last-child {
+  border-bottom: 0;
+}
+
+.registration-labels {
+  background: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status {
+  background: #dff3cc;
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 750;
+  padding: 0.35rem 0.6rem;
+  text-align: center;
+}
+
+.registration-count--sold-out {
+  background: var(--spots-sold-out);
+  border-radius: 1rem;
+  color: var(--error);
+  padding: 0.5rem 1rem;
+}
+
+@media (max-width: 620px) {
+  .registration-row {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-labels {
+    display: none;
+  }
+}
