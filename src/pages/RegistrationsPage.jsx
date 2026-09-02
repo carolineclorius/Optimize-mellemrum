@@ -60,6 +60,11 @@ export default function RegistrationsPage() {
             ([eventId, eventRegistrations]) => {
               const event = eventRegistrations[0].event;
 
+              const availableSpots = Math.max(
+                0,
+                event.capacity - eventRegistrations.length,
+              );
+
               return (
                 <section className="registration-group" key={eventId}>
                   <div className="registration-group-header">
@@ -79,6 +84,18 @@ export default function RegistrationsPage() {
                         {eventRegistrations.length === 1
                           ? "tilmeldt"
                           : "tilmeldte"}
+                      </p>
+
+                      <p className="registration-count">
+                        {availableSpots === 0 ? (
+                          <span className="registration-count--sold-out">
+                            Udsolgt
+                          </span>
+                        ) : availableSpots === 1 ? (
+                          "1 plads ledig"
+                        ) : (
+                          `${availableSpots} pladser ledige`
+                        )}
                       </p>
                     </div>
                   </div>

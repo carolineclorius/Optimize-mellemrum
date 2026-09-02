@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { getEvents } from "../services/events";
+import { getRegistrationEventIds } from "../services/registrations";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 
 export default function HomePage() {
   const { state } = useLocation();
   const [events, setEvents] = useState([]);
+  const [registrationEventIds, setRegistrationEventIds] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Alle");
   const [isLoading, setIsLoading] = useState(true);
@@ -26,8 +28,13 @@ export default function HomePage() {
   useEffect(() => {
     async function loadEvents() {
       try {
-        const data = await getEvents();
-        setEvents(data);
+        const [eventsData, registrationsData] = await Promise.all([
+          getEvents(),
+          getRegistrationEventIds(),
+        ]);
+
+        setEvents(eventsData);
+        setRegistrationEventIds(registrationsData);
       } catch {
         setErrorMessage("Events kunne ikke hentes. Prøv at genindlæse siden.");
       } finally {
@@ -115,32 +122,56 @@ export default function HomePage() {
           <ErrorState message={errorMessage} />
         ) : (
           <section className="event-grid" aria-labelledby="events-title">
-            {filteredEvents.map((event, index) => (
-              <Link
-                className="event-card-link"
-                to={`/events/${event.id}`}
-                key={event.id}
-                aria-label={`Læs mere om ${event.title}`}
-              >
-                <article className="event-card">
-                  <img
-                    src={event.image}
-                    alt=""
-                    loading={index < 3 ? "eager" : "lazy"}
-                  />
-                  <div className="event-card-content">
-                    <p className="event-category">{event.category}</p>
-                    <h3>{event.title}</h3>
-                    <p>{event.summary}</p>
-                    <div className="event-meta">
-                      <span>{formatEventDate(event.date)}</span>
-                      <span>{event.venueName}</span>
+            {filteredEvents.map((event, index) => {
+              const registrationCount = registrationEventIds.filter(
+                (registration) => registration.eventId === event.id,
+              ).length;
+
+              const availableSpots = Math.max(
+                0,
+                event.capacity - registrationCount,
+              );
+
+              return (
+                <Link
+                  className="event-card-link"
+                  to={`/events/${event.id}`}
+                  key={event.id}
+                  aria-label={`Læs mere om ${event.title}`}
+                >
+                  <article className="event-card">
+                    <img
+                      src={event.image}
+                      alt=""
+                      loading={index < 3 ? "eager" : "lazy"}
+                    />
+                    <div className="event-card-content">
+                      <p className="event-category">{event.category}</p>
+                      <h3>{event.title}</h3>
+                      <p>{event.summary}</p>
+                      <div className="event-meta">
+                        <span>{formatEventDate(event.date)}</span>
+                        <span>{event.venueName}</span>
+                      </div>
+                      {availableSpots < 10 && (
+                        <p
+                          className={`available-spots ${
+                            availableSpots <= 0
+                              ? "available-spots--sold-out"
+                              : ""
+                          }`}
+                        >
+                          {availableSpots <= 0
+                            ? "Udsolgt"
+                            : "Få pladser tilbage"}
+                        </p>
+                      )}
+                      <span className="card-link">Læs mere</span>
                     </div>
-                    <span className="card-link">Læs mere</span>
-                  </div>
-                </article>
-              </Link>
-            ))}
+                  </article>
+                </Link>
+              );
+            })}
           </section>
         )}
       </main>
