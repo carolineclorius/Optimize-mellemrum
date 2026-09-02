@@ -1,4 +1,5 @@
 import errorIcon from "../assets/error-icon.svg";
+import "./ErrorState.css";
 
 export default function ErrorState({
   message = "Indholdet kunne ikke hentes. Prøv at genindlæse siden.",

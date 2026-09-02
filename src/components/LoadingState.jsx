@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Lottie } from "lottie-react";
 import loadingAnimation from "../assets/animations/loading-animation.json";
+import "./LoadingState.css";
 
 export default function LoadingState({ message = "Indlæser..." }) {
   const [isVisible, setIsVisible] = useState(false);

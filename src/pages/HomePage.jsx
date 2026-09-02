@@ -4,6 +4,7 @@ import { getEvents } from "../services/events";
 import { getRegistrationEventIds } from "../services/registrations";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
+import "./HomePage.css";
 
 export default function HomePage() {
   const { state } = useLocation();
