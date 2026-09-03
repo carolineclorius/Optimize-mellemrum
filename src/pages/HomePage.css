@@ -92,7 +92,7 @@
     transform 180ms ease;
 }
 
-.event-card:hover {
+.event-card-link:hover .event-card {
   box-shadow: var(--shadow);
   transform: translateY(-4px);
 }
@@ -155,7 +155,7 @@
     color 160ms ease;
 }
 
-.card-link:hover {
+.event-card-link:hover .card-link {
   background: var(--lime);
   color: var(--green);
 }
