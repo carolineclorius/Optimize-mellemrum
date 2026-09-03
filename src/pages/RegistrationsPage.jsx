@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getRegistrations } from "../services/registrations";
+import {
+  getRegistrations,
+  updateRegistrationStatus,
+} from "../services/registrations";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import "./RegistrationsPage.css";
@@ -16,6 +19,15 @@ export default function RegistrationsPage() {
         const data = await getRegistrations();
         setRegistrations(data);
         setRegistrationCount(data.length);
+        const newRegistrations = data.filter(
+          (registration) => registration.status === "Ny",
+        );
+
+        await Promise.all(
+          newRegistrations.map((registration) =>
+            updateRegistrationStatus(registration.id, "Set"),
+          ),
+        );
       } catch {
         setErrorMessage(
           "Tilmeldingerne kunne ikke hentes. Prøv at genindlæse siden.",
@@ -123,7 +135,14 @@ export default function RegistrationsPage() {
 
                         <span role="cell">{registration.email}</span>
 
-                        <span className="status" role="cell">
+                        <span
+                          className={`status ${
+                            registration.status === "Ny"
+                              ? "status-new"
+                              : "status-seen"
+                          }`}
+                          role="cell"
+                        >
                           {registration.status}
                         </span>
                       </div>

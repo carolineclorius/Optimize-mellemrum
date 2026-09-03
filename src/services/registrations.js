@@ -84,3 +84,15 @@ export async function createRegistration(registration) {
     throw new Error("Tilmeldingen kunne ikke gemmes");
   }
 }
+
+export async function updateRegistrationStatus(id, status) {
+  const response = await fetch(`${SUPABASE_URL}/registrations?id=eq.${id}`, {
+    method: "PATCH",
+    headers: supabaseHeaders,
+    body: JSON.stringify({ status }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Status kunne ikke opdateres");
+  }
+}

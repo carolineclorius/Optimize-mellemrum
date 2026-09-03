@@ -70,13 +70,23 @@
 }
 
 .status {
-  background: #dff3cc;
   border-radius: 999px;
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 750;
   padding: 0.35rem 0.6rem;
   text-align: center;
+}
+
+.status-new {
+  background: #dff3cc;
+  color: var(--green);
+}
+
+.status-seen {
+  background: white;
+  border: 1px solid var(--line);
+  color: var(--ink);
 }
 
 .registration-count--sold-out {
